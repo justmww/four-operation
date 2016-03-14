@@ -1,0 +1,74 @@
+//四则运算  初始版本(不管任何条件，只是生成两个数和一个符号) 出现的问题：忘记加break，随机数的表示
+//毛雯雯20143066 2016.3.10
+//进一步版本(添加循环，改善显示的结果的视觉效果（每五行换行），减数大于被减数，分母不为零)
+import java.util.Random;
+public class CalculateOfFour_1 
+{
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+		int i;
+		for(i=1;i<=30;i++)
+		{
+			//左边的数
+			int a;
+			Random rand1 = new Random();  
+			a = rand1.nextInt(100)+0;  //指0-99的数，包括0和99
+		
+			//右边的数
+			int b;
+			Random rand2 = new Random();  
+			b = rand2.nextInt(100)+0;
+		
+			//符号
+			int c;
+			Random rand3 = new Random();  
+			c = rand3.nextInt(4);
+		
+			switch(c)
+			{
+				case(0):
+				{
+					System.out.print(a);
+					System.out.print('+');
+					System.out.print(b);
+					System.out.println("=	");break;
+				}
+				case(1):
+				{
+					if(a<b)
+					{
+						int d;
+						d = a;
+						a = b;
+						b = d;
+					}              //防止小学生不会算负数而添加的六行代码，若无需此段代码，可注释掉
+					System.out.print(a);
+					System.out.print('-');
+					System.out.print(b);
+					System.out.println("=	");break;
+				}
+				case(2):
+				{					
+					System.out.print(a);
+					System.out.print('*');
+					System.out.print(b);
+					System.out.println("=	");	break;
+				}
+				case(3):
+				{
+					while(b==0)
+						b = rand2.nextInt(100)+0; // 保证分母不为零
+					System.out.print(a);
+					System.out.print('/');
+					System.out.print(b);
+					System.out.println("=	");break;
+				}
+			}
+			if(i%5==0)
+				System.out.println();
+		}
+		
+	}
+
+}
