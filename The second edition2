@@ -1,0 +1,179 @@
+//四则运算  初始版本(不管任何条件，只是生成两个数和一个符号) 出现的问题：忘记加break，随机数的表示
+//毛雯雯20143066 2016.3.10
+//进一步版本(添加循环，改善显示的结果的视觉效果（每五行换行），减数大于被减数，分母不为零,真分数的四则运算)
+import java.util.Random;
+public class CalculateOfFour_1 
+{
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+		int i;
+		for(i=1;i<=10000;i++)
+		{
+			////////两个整数生成///////////////
+			//左边的数
+			int a;
+			Random rand1 = new Random();  
+			a = rand1.nextInt(100)+0;  //指0-99的数，包括0和99
+		
+			//右边的数
+			int b;
+			Random rand2 = new Random();  
+			b = rand2.nextInt(100)+0;
+			/////////整数生成/////////////////
+			
+			////////真分数生成/////////////////
+			
+			//分子
+			int x;
+			Random rand4 = new Random();  
+			x = rand4.nextInt(100)+1;
+			
+			//分母
+			int y;
+			Random rand5 = new Random();  
+			y = rand5.nextInt(100)+1;
+			
+			if(x>y)
+			{
+				int r;
+				r = x;
+				x = y;
+				y = r;
+			}
+			if(x==1&&y==1)
+			{
+				y=y+1;
+			}
+			
+			for(int j=2;j<=x;j++)
+			{
+				if(x%j==0&&y%j==0)
+				{
+					x = x/j;
+					y = y/j;
+					j = 1;
+				}
+			
+			}
+			
+			
+			//分子
+			int p;
+			Random rand6 = new Random();  
+			p = rand6.nextInt(100)+1;
+			
+			//分母
+			int q;
+			Random rand7 = new Random();  
+			q = rand7.nextInt(100)+1;
+			
+			if(p>q)
+			{
+				int r1;
+				r1 = p;
+				p = q;
+				q = r1;
+			}
+			if(p==1&&q==1)
+			{
+				q=q+1;
+			}
+	
+			for(int j=2;j<=p;j++)
+			{
+				if(p%j==0&&q%j==0)
+				{
+					p = p/j;
+					q = q/j;
+					j = 1;
+				}
+			}
+			
+			
+			////////真分数生成/////////////////
+			
+			//整数和真分数的选择
+			int t;
+			Random rand8 = new Random();  
+			t = rand8.nextInt(5);
+			
+			//符号
+			int c;
+			Random rand3 = new Random();  
+			c = rand3.nextInt(4);
+		  
+			if(t!=0)
+			{
+				switch(c)
+				{
+					case(0):
+					{
+						System.out.println(a+"+"+b+"=	");break;
+					}
+					case(1):
+					{
+						if(a<b)
+						{
+							int d;
+							d = a;
+							a = b;
+							b = d;
+						}              //防止小学生不会算负数而添加的六行代码，若无需此段代码，可注释掉
+						System.out.println(a+"-"+b+"=	");
+						break;
+					}
+					case(2):
+					{					
+						System.out.println(a+"*"+b+"=	");	break;
+					}
+					case(3):
+					{
+						while(b==0)
+							b = rand2.nextInt(100)+0; // 保证分母不为零
+						System.out.println(a+"/"+b+"=	");break;
+					}
+				}
+				if(i%5==0)
+					System.out.println();
+			}
+			else
+			{
+				switch(c)
+				{
+					case(0):
+					{
+						System.out.println(x+"/"+y+"+"+p+"/"+q+"=	");
+						break;
+					}
+					case(1):
+					{
+						if(a<b)
+						{
+							int d;
+							d = a;
+							a = b;
+							b = d;
+						}              //防止小学生不会算负数而添加的六行代码，若无需此段代码，可注释掉
+						System.out.println(x+"/"+y+"-"+p+"/"+q+"=	");break;
+					}
+					case(2):
+					{					
+						System.out.println(x+"/"+y+" "+"*"+" "+p+"/"+q+"=	");break;
+					}
+					case(3):
+					{
+						while(b==0)
+							b = rand2.nextInt(100)+0; // 保证分母不为零
+						System.out.println(x+"/"+y+" "+"/"+" "+p+"/"+q+"=	");break;
+					}
+				}
+				if(i%5==0)
+					System.out.println();
+				
+			}
+		}
+		
+	}
+
+}
