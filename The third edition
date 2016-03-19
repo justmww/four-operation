@@ -1,0 +1,656 @@
+//最新更新2016.3.19 构建之法中的四则运算
+//20143066毛雯雯 
+#include<iostream>
+#include<cstdlib>
+#define N 10000
+using namespace std;
+
+//默认整数的生成
+int any_Number()
+{	
+	int n;
+	n = rand()%100;
+	return n;
+}
+//指定整数的生成
+int named_Number(int x,int y)
+{
+	int n;
+	n = rand()%(y-x+1)+x;
+	return n;
+}
+//指定符号的生成
+char named_symbol()
+{
+	char c;
+	int i;
+	i = rand()%2;
+	switch(i)
+	{
+		case(0):
+		{
+			c='+';
+			break;
+		}
+		case(1):
+		{
+			c='-';
+			break;
+		}
+	}
+	return c;
+}
+//默认符号的生成
+char any_symbol()//符号生成
+{
+	char c;
+	int i;
+	i = rand()%4;
+	switch(i)
+	{
+		case(0):
+		{
+			c='+';
+			break;
+		}
+		case(1):
+		{
+			c='-';
+			break;
+		}
+		case(2):
+		{					
+			c='*';
+			break;
+		}
+		case(3):
+		{
+			c='/';
+			break;
+		}
+	}
+	return c;
+}
+
+//指定整数四则算术的生成
+void int_named_Build(int x,int y)
+{
+	int number_of_named_int;
+	cout<<"请输入生成指定范围内的纯整数四则运算的个数"<<endl;
+	cin>>number_of_named_int;
+	
+	int a[N],b[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_named_int;i++)
+	{
+		
+		a[i] = named_Number(x,y);
+		c[i] = any_symbol();
+		b[i] = named_Number(x,y);
+		while(c[i]=='/'&&b[i]==0)
+			b[i] = named_Number(x,y);
+	}
+	for(i=0;i<number_of_named_int-1;i++)
+	{
+		for(j=i;j<number_of_named_int;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j]))
+			{
+				if((b[i]+a[i]>(y-x+1))||(b[i]+a[i]<x))
+				{
+					if(a[i]-b[i]>=0) ////////////////////////////////有错误！！！！！！！！！！！！！！！！
+						a[i] = a[i]-b[i];
+					else
+						a[i] = b[i]-a[i];
+				}
+				else
+					b[i]=a[i]+b[i];
+			}
+
+		}
+	}
+	for(int i=0;i<number_of_named_int;i++)
+	{
+		cout<<a[i]<<c[i]<<b[i]<<"=	"<<endl;
+	}
+}
+
+//指定整数仅加减算术的生成
+void int_named_symbol_Build(int x,int y)
+{
+	int number_of_named_int;
+	cout<<"请输入生成指定范围内的纯整数加减运算的个数"<<endl;
+	cin>>number_of_named_int;
+	
+	int a[N],b[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_named_int;i++)
+	{
+		
+		a[i] = named_Number(x,y);
+		c[i] = named_symbol();
+		b[i] = named_Number(x,y);
+		while(c[i]=='/'&&b[i]==0)
+			b[i] = named_Number(x,y);
+	}
+	for(i=0;i<number_of_named_int-1;i++)
+	{
+		for(j=i;j<number_of_named_int;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j]))
+			{
+				if((b[i]+a[i]>(y-x+1))||(b[i]+a[i]<x))
+				{
+					if(a[i]-b[i]>=0) ////////////////////////////////有错误！！！！！！！！！！！！！！！！
+						a[i] = a[i]-b[i];
+					else
+						a[i] = b[i]-a[i];
+				}
+				else
+					b[i]=a[i]+b[i];
+			}
+
+		}
+	}
+	for(int i=0;i<number_of_named_int;i++)
+	{
+		cout<<a[i]<<c[i]<<b[i]<<"=	"<<endl;
+	}
+}
+
+//默认整数四则算术的生成
+void int_Build()
+{
+	int number_of_pure_int;
+	cout<<"请输入生成纯整数四则运算的个数"<<endl;
+	cin>>number_of_pure_int;
+	
+	int a[N],b[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_pure_int;i++)
+	{
+		
+		a[i] = any_Number();
+		c[i] = any_symbol();
+		b[i] = any_Number();
+		while(c[i]=='/'&&b[i]==0)
+			b[i] = any_Number();
+	}
+	for(i=0;i<number_of_pure_int-1;i++)
+	{
+		for(j=i;j<number_of_pure_int;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j]))
+			{
+				if(b[i]+a[i]>=99)
+				{
+					if(a[i]-b[i]>=0)
+						a[i] = a[i]-b[i];
+					else
+						a[i] = b[i]-a[i];
+				}
+				else
+					b[i]=a[i]+b[i];
+			}
+		}
+	}
+	for(int i=0;i<number_of_pure_int;i++)
+	{
+		cout<<a[i]<<c[i]<<b[i]<<"=	"<<endl;
+	}
+	
+	
+}
+
+//默认整数仅加减的生成
+void int_symbol_Build()
+{
+	int number_of_pure_int;
+	cout<<"请输入生成纯整数四则运算的个数"<<endl;
+	cin>>number_of_pure_int;
+	
+	int a[N],b[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_pure_int;i++)
+	{
+		
+		a[i] = any_Number();
+		c[i] = named_symbol();
+		b[i] = any_Number();
+		while(c[i]=='/'&&b[i]==0)
+			b[i] = any_Number();
+	}
+	for(i=0;i<number_of_pure_int-1;i++)
+	{
+		for(j=i;j<number_of_pure_int;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j]))
+			{
+				if(b[i]+a[i]>=99)
+				{
+					if(a[i]-b[i]>=0)
+						a[i] = a[i]-b[i];
+					else
+						a[i] = b[i]-a[i];
+				}
+				else
+					b[i]=a[i]+b[i];
+			}
+		}
+	}
+	for(int i=0;i<number_of_pure_int;i++)
+	{
+		cout<<a[i]<<c[i]<<b[i]<<"=	"<<endl;
+	}
+	
+	
+}
+
+//指定符号的真分数算术的生成
+void true_Fraction_symbol_build()
+{
+	int number_of_pure_true_fraction;
+	cout<<"请输入生成纯真分数四则运算的个数"<<endl;
+	cin>>number_of_pure_true_fraction;
+	
+	int a[N],b[N],d[N],e[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		a[i] = rand()%100+1;
+		b[i] = rand()%100+1;
+		/*while(e[i]==0||d[i]==0)
+		{
+			e[i] = rand()%100;
+			d[i] = rand()%100;
+		}*/
+		//c[i] = any_symbol();
+		if(a[i]>b[i])
+		{
+			int r;
+			r = a[i];
+			a[i] = b[i];
+			b[i] = r;
+		}
+		if(a[i]==b[i])
+		{
+			b[i]=b[i]+1;
+		}
+			
+		for(j=2;j<=a[i];j++)
+		{
+			if(a[i]%j==0&&b[i]%j==0)
+			{
+				a[i] = a[i]/j;
+				b[i] = b[i]/j;
+				j = 1;
+			}	
+		}
+	}
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		c[i] = named_symbol();
+	}
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		d[i] = rand()%100+1;
+		e[i] = rand()%100+1;
+		/*while(e[i]==0||d[i]==0)
+		{
+			e[i] = rand()%100;
+			d[i] = rand()%100;
+		}*/
+		//c[i] = any_symbol();
+		if(d[i]>e[i])
+		{
+			int r;
+			r = d[i];
+			d[i] = e[i];
+			e[i] = r;
+		}
+		if(d[i]==e[i])
+		{
+			e[i]=e[i]+1;
+		}
+			
+		for(j=2;j<=d[i];j++)
+		{
+			if(d[i]%j==0&&e[i]%j==0)
+			{
+				d[i] = d[i]/j;
+				e[i] = e[i]/j;
+				j = 1;
+			}	
+		}
+	}
+	for(i=0;i<number_of_pure_true_fraction-1;i++)
+	{
+		for(j=i;j<number_of_pure_true_fraction;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j])&&(e[i]==e[j])&&(d[i]==d[j]))
+				b[i]=a[i]+b[i];
+		}
+	}
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		cout<<' '<<a[i]<<'/'<<b[i]<<' '<<c[i]<<' '<<d[i]<<'/'<<e[i]<<' '<<"=	"<<endl;
+	}
+	
+	/*any_True_Fraction();
+	cout<<' '<<any_symbol()<<' ';
+	any_True_Fraction();
+	cout << "=	" ;*/
+}
+
+//随机符号的真分数算术的生成
+void true_Fraction_build()
+{
+	int number_of_pure_true_fraction;
+	cout<<"请输入生成纯真分数四则运算的个数"<<endl;
+	cin>>number_of_pure_true_fraction;
+	
+	int a[N],b[N],d[N],e[N];
+	char c[N];
+	int i,j;
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		a[i] = rand()%100+1;
+		b[i] = rand()%100+1;
+		/*while(e[i]==0||d[i]==0)
+		{
+			e[i] = rand()%100;
+			d[i] = rand()%100;
+		}*/
+		//c[i] = any_symbol();
+		if(a[i]>b[i])
+		{
+			int r;
+			r = a[i];
+			a[i] = b[i];
+			b[i] = r;
+		}
+		if(a[i]==b[i])
+		{
+			b[i]=b[i]+1;
+		}
+			
+		for(j=2;j<=a[i];j++)
+		{
+			if(a[i]%j==0&&b[i]%j==0)
+			{
+				a[i] = a[i]/j;
+				b[i] = b[i]/j;
+				j = 1;
+			}	
+		}
+	}
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		c[i] = any_symbol();
+	}
+
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		d[i] = rand()%100+1;
+		e[i] = rand()%100+1;
+		/*while(e[i]==0||d[i]==0)
+		{
+			e[i] = rand()%100;
+			d[i] = rand()%100;
+		}*/
+		//c[i] = any_symbol();
+		if(d[i]>e[i])
+		{
+			int r;
+			r = d[i];
+			d[i] = e[i];
+			e[i] = r;
+		}
+		if(d[i]==e[i])
+		{
+			e[i]=e[i]+1;
+		}
+			
+		for(j=2;j<=d[i];j++)
+		{
+			if(d[i]%j==0&&e[i]%j==0)
+			{
+				d[i] = d[i]/j;
+				e[i] = e[i]/j;
+				j = 1;
+			}	
+		}
+	}
+	for(i=0;i<number_of_pure_true_fraction-1;i++)
+	{
+		for(j=i;j<number_of_pure_true_fraction;j++)
+		{
+			if((a[i]==a[j])&&(b[i]==b[j])&&(c[i]==c[j])&&(e[i]==e[j])&&(d[i]==d[j]))
+				b[i]=a[i]+b[i];
+		}
+	}
+	for(i=0;i<number_of_pure_true_fraction;i++)
+	{
+		cout<<' '<<a[i]<<'/'<<b[i]<<' '<<c[i]<<' '<<d[i]<<'/'<<e[i]<<' '<<"=	"<<endl;
+	}
+	
+	/*any_True_Fraction();
+	cout<<' '<<any_symbol()<<' ';
+	any_True_Fraction();
+	cout << "=	" ;*/
+}
+
+
+/*void control_Beauty(int i)
+{
+	int j;
+	cout<<"一行需要放几个算术？"<<endl;
+	cin>>j;
+	if(i%j==0)
+		cout<<endl;
+}*/
+
+//随机真分数的生成
+/*void any_True_Fraction()
+{
+	int x,y;
+	x = rand()%100;
+	y = rand()%100;
+	if(x>y)
+	{
+		int r;
+		r = x;
+		x = y;
+		y = r;
+	}
+	if(x==1&&y==1)
+	{
+		y=y+1;
+	}
+			
+	for(int j=2;j<=x;j++)
+	{
+		if(x%j==0&&y%j==0)
+		{
+			x = x/j;
+			y = y/j;
+			j = 1;
+		}	
+	}
+	cout<<x<<"/"<<y;
+}*/
+
+
+
+
+
+void main()
+{
+	/*int number_of_pure_int;
+	cout<<"请输入生成纯整数四则运算的个数"<<endl;
+	cin>>number_of_pure_int;
+
+	for(int i=1;i<=number_of_pure_int;i++)
+	{
+		int_Build();
+	}*//*cout<<""<<endl;
+	cout<<""<<endl;
+	cout<<""<<endl;*/
+	int choose_1;
+	cout<<"请选择:	1纯整数的运算"<<endl;
+	cout<<"	2真分数的运算"<<endl;
+	cout<<"	3混合运算"<<endl;
+	cin>>choose_1;
+	while(choose_1!=1&&choose_1!=2&&choose_1!=3)
+	{
+		cout<<"输入错误，请重新输入："<<endl;
+		cin>>choose_1;
+	}
+	if(choose_1==1)
+	{	
+		int choose_2;
+		cout<<"请选择：1指定范围的整数运算"<<endl;
+		cout<<"	2默认范围的整数运算"<<endl;
+		cin>>choose_2;
+		while(choose_2!=1&&choose_2!=2)
+		{
+			cout<<"输入错误，请重新输入："<<endl;
+			cin>>choose_2;
+		}
+		if(choose_2==1)
+		{
+			int x;
+			int y;
+			cout<<"请输入指定整数的范围:"<<endl;
+			cin>>x;
+			cin>>y;
+
+			int choose_3;
+			cout<<"请选择:1仅加减法的整数运算"<<endl;
+			cout<<"	2四则整数运算"<<endl;
+			cin>>choose_3;
+
+			while(choose_3!=1&&choose_3!=2)
+			{
+				cout<<"输入错误，请重新输入："<<endl;
+				cin>>choose_3;
+			}
+			if(choose_3==1)
+			{
+				//指定整数&&仅加减法
+				int_named_symbol_Build(x,y);
+			}
+			else
+			{
+				//指定整数&&四则运算
+				int_named_Build(x,y);
+			}
+
+		}
+		else
+		{
+			int choose_3;
+			cout<<"请选择：1仅加减法的随机整数运算"<<endl;
+			cout<<"	2四则随机整数运算"<<endl;
+			cin>>choose_3;
+
+			while(choose_3!=1&&choose_3!=2)
+			{
+				cout<<"输入错误，请重新输入："<<endl;
+				cin>>choose_3;
+			}
+			if(choose_3==1)
+			{
+				//随机整数&&仅加减法
+				int_symbol_Build();
+			}
+			else
+			{
+				//随机整数&&四则运算
+				int_Build();
+			}
+		
+		}
+	}
+	if(choose_1==2)
+	{
+		int choose_3;
+		cout<<"请选择：1仅加减法的真分数运算"<<endl;
+		cout<<"	2四则真分数运算"<<endl;
+		cin>>choose_3;
+
+		while(choose_3!=1&&choose_3!=2)
+		{
+			cout<<"输入错误，请重新输入："<<endl;
+			cin>>choose_3;
+		}
+		if(choose_3==1)
+		{
+			//真分数&&仅加减法
+			true_Fraction_symbol_build();
+		}
+		else
+		{
+			//真分数&&四则运算
+			true_Fraction_build();
+		}
+	}
+	if(choose_1==3)
+	{
+		cout<<"暂未实现！敬请等待！"<<endl;
+	}
+	/*cout<<"是否需要指定运算范围？是：请输入1，否：请输入0"<<endl;
+	int a;
+	cin>>a;
+	while(a!=1||a!=0)
+	{
+		cout<<"输入错误，请重新输入："<<endl;
+		cin>>a;
+	}
+
+	cout<<"运算是否需要包含乘除法？是：请输入1，否：请输入0"<<endl;
+	int b;
+	cin>>b;
+	while(b!=1||b!=0)
+	{
+		cout<<"输入错误，请重新输入："<<endl;
+		cin>>b;
+	}
+
+
+	if(a==1)
+	{
+		
+	}
+
+	int_Build();
+	true_Fraction_build();
+	int number_of_pure_true_fraction;
+	cout<<"请输入生成纯真分数四则运算的个数"<<endl;
+	cin>>number_of_pure_true_fraction;
+	
+	
+	
+	for(int i=1;i<=number_of_pure_true_fraction;i++)
+	{
+		true_Fraction_build();
+	}
+	*/
+	/*for(int i=0;i<100;i++)
+		cout<<named_Number(10,100)<<endl;*/
+
+}
