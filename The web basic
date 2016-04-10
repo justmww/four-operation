@@ -1,0 +1,271 @@
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.Stack;   //栈
+class CreateExp {
+    private int a[];
+    private char s[];
+    private char sym[];
+    private char brackets[];
+    private int num[];
+
+    public CreateExp() 
+    {
+        a = new int[100];
+        s = new char[4];
+        s[0] = '+';
+        s[1] = '-';
+        s[2] = '*';
+        s[3] = '/';
+        sym = new char[100];
+        brackets = new char[100];
+        num = new int[100];
+    }
+
+    public void dfs(int s, int e)// 使用dfs递归添加括号
+    {
+        if ((int) (Math.random() * 4) == 0) // 四分之一的概率，不进行任何操作
+        {
+            return;
+        }
+        if (e - s <= 1)// 只有一个元素或没有元素，不进行任何操作
+        {
+            return;
+        }
+        int s1 = (int) (Math.random() * (e - s - 1)) + s;// 随机生成插入括号的位置
+        int e1 = (int) (Math.random() * (e - s1)) + s1;
+        while (s1 < s || e1 > e || s1 >= e1 || (s1 == s && e1 == e))// 避免无用括号
+        {
+            s1 = (int) (Math.random() * (e - s - 1)) + s;
+            e1 = (int) (Math.random() * (e - s1)) + s1;
+        }
+        if (brackets[s1] == ')' || brackets[e1] == '(')
+        {
+            return;
+        }
+        brackets[s1] = '(';
+        brackets[e1] = ')';
+        num[s1]++;
+        num[e1]++;
+        dfs(s, s1 - 1);// 插入括号的左边几个元素
+        dfs(e1 + 1, e);// 括号之间的几个元素
+        dfs(s1, e1);// 括号右边的几个元素
+    }
+
+    String Create(int max,int min) 
+    {
+        int n;
+        String ans;
+        ans = "";
+        n = (int) (Math.random() * (3)) + 2;
+        ;
+        Arrays.fill(brackets, '.');
+        Arrays.fill(num, 0);
+        
+        for (int i = 1; i <= n; i++) 
+        {
+            a[i] = (int) ((max-min+1)*Math.random() ) + min;
+            sym[i] = s[(int) (Math.random() * (4))];
+        }
+        /*for(int i = 1; i <= n; i++)
+        {   
+            int middle;
+            if(sym[i]=='-'&&a[i]<a[i+1])
+            {
+                middle=a[i];
+                a[i]=a[i+1];
+                a[i+1]=middle;
+            }
+                
+        }*/
+        dfs(1, n);
+        while ((brackets[1] == '(') && (num[1]-- != 0)) 
+        {
+            ans += '(';
+        }
+        ans += a[1] + "";
+        for (int i = 2; i <= n; i++) 
+        {
+            ans += sym[i];
+            while (brackets[i] == '(' && num[i]-- != 0) 
+            {
+                ans += '(';
+            }
+            ans += a[i] + "";
+            while (brackets[i] == ')' && num[i]-- != 0) 
+            {
+                ans += ')';
+            }
+        }
+        return ans;
+    }
+}
+public class CalculatorUtil //计算  
+{ 
+    private Stack<Character> priStack = new Stack<Character>();// 操作符栈    
+    private Stack<Integer> numStack = new Stack<Integer>();// 操作数栈    
+   
+    public double caculate(String str) 
+    {  //计算  
+        String temp;//临时存放读取的字符
+        StringBuffer tempNum = new StringBuffer(); //  用来临时存放数字字符串(当为多位数时) 
+        StringBuffer string = new StringBuffer().append(str);  //用来保存，提高效率 
+       
+        while (string.length() != 0) //当没有余留才计算完成
+        {    
+            temp = string.substring(0, 1);    
+            string.delete(0, 1);  
+           // 判断temp，当temp为操作符时 
+            if (!isNum(temp)) 
+            {   
+                // 此时的tempNum内即为需要操作的数，取出数，压栈，并且清空tempNum   
+                if (!"".equals(tempNum.toString())) 
+                { 
+                    // 当表达式的第一个符号为括号   
+                    int num=Integer.parseInt(tempNum.toString());
+                    numStack.push(num);
+                    tempNum.delete(0, tempNum.length());    
+                } 
+             // 用当前取得的运算符与栈顶运算符比较优先级：若高于，则因为会先运算，放入栈顶；若等于，因为出现在后面，所以会后计算，所以栈顶元素出栈，取出操作数运算；   
+                // 若小于，则同理，取出栈顶元素运算，将结果入操作数栈。   
+            
+                // 判断当前运算符与栈顶元素优先级，取出元素，进行计算(因为优先级可能小于栈顶元素，还小于第二个元素等等，需要用循环判断)   
+                while (!compare(temp.charAt(0)) && (!priStack.empty())) { 
+                    int a =  numStack.pop();  //第二个和第一个运算数  
+                    int b =  numStack.pop();   
+                    char ope = priStack.pop();    
+                    int result = 0;  //运算结果 
+                    switch (ope) 
+                    {    
+                    // 将操作结果放入操作数栈 
+                        case '+':    
+                            result = b + a;    
+                            numStack.push(result);    
+                            break;    
+                        case '-':    
+                            result = b - a;    
+                            numStack.push(result);    
+                            break;    
+                        case '*':    
+                            result = b * a;    
+                            numStack.push(result);    
+                            break;    
+                        case '/':    
+                            result = b / a;    
+                            numStack.push(result);    
+                            break;    
+                    }    
+    
+                }
+             // 判断当前运算符与栈顶元素优先级， 如果高，或者低于平，计算完后，将当前操作符号，放入操作符栈 
+                if (temp.charAt(0) != '#') 
+                {    
+                    priStack.push(new Character(temp.charAt(0)));    
+                 // 当栈顶为'('，而当前元素为')'时，则是括号内以算完，去掉括号
+                    if (temp.charAt(0) == ')')
+                    {
+                        priStack.pop();    
+                        priStack.pop();    
+                    }    
+                }    
+            } 
+            else    // 当为非操作符时（数字）
+                // 将读到的这一位数接到以读出的数后(当不是个位数的时候)
+                tempNum = tempNum.append(temp);  
+        }    
+        return numStack.pop();    
+    }    
+    //判断传入的字符是不是0-9的数字  
+    private boolean isNum(String temp)
+    {    
+        return temp.matches("[0-9]");    
+    }    
+    
+    //比较当前操作符与栈顶元素操作符优先级，如果比栈顶元素优先级高，则返回true，否则返回false  
+     
+    // 需要进行比较的字符  
+    //比较结果 true代表比栈顶元素优先级高，false代表比栈顶元素优先级低  
+    
+    private boolean compare(char str) 
+    {    
+        // 当为空时，显然 当前优先级最低，返回高 
+        if (priStack.empty()) 
+        {    
+            return true;    
+        }    
+        // 如果栈顶为'('显然，优先级最低，')'不可能为栈顶。
+        char last = (char) priStack.lastElement();    
+        if (last == '(') 
+        {    
+            return true;    
+        }    
+        switch (str) 
+        {    
+            case '#':    
+                return false;  
+            case '(':      
+                return true;    
+            case ')':    
+                return false;    
+            case '*': 
+            {    
+                if (last == '+' || last == '-')    
+                    return true;    
+                else    
+                    return false;    
+            }    
+            case '/': 
+            {    
+                if (last == '+' || last == '-')    
+                    return true;    
+                else    
+                    return false;    
+            }     
+            case '+':    
+                return false;    
+            case '-':    
+                return false;    
+            }    
+            return true;    
+        }    
+    
+    public static void main(String args[]) 
+    {    
+        /*CalculatorUtil operate = new CalculatorUtil();    
+        double t = operate.caculate("(3+4*(4*10-15/9)#");      
+        System.out.println(t);  */
+        
+        Scanner in=new Scanner(System.in);      
+        System.out.println("请输入要输出的算式的个数：");
+        int n=in.nextInt();
+        
+        System.out.println("请输入数据范围  请先输入上界 再输入下界");
+        Scanner in1=new Scanner(System.in);
+        int max1=in1.nextInt();
+        int min1=in1.nextInt();
+        
+        int result;
+        int count=0;
+        
+        for(int x=0;x<n;x++)
+        {   
+            CreateExp exp = new CreateExp()  ;
+            CalculatorUtil cal =new CalculatorUtil() ;
+            String expString = exp.Create(max1,min1);
+            double ans = cal.caculate(expString+"#");
+            System.out.println(expString+"=");
+            System.out.println("请输入结果：");
+             result=in.nextInt();
+            if(result==ans)
+            {
+                System.out.println("结果正确！");
+                count++;
+            }
+            if(result!=ans)
+            {
+                System.out.println("结果错误 答案为： "+ans);
+            }
+        }
+        System.out.println("共做对"+count+"个，"+"做错"+(n-count)+"个。");
+    }    
+    
+}
